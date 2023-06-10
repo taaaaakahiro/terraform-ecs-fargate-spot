@@ -1,0 +1,56 @@
+name: Test
+
+on:
+  workflow_dispatch
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [ '1.19' ]
+        postgres-version: [ '12' ]
+        postgres-dbname: [ 'postgres' ]
+        postgres-host: [ 'localhost' ]
+        postgres-user: [ 'postgres' ]
+        postgres-password: [ 'postgres' ]
+
+    services:
+      db:
+        image: postgres:${{ matrix.postgres-version }}
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: ${{ matrix.postgres-user }}
+          POSTGRES_PASSWORD: ${{ matrix.postgres-password }}
+          POSTGRES_DB: ${{ matrix.postgres-dbname }}
+        options:
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Set up Go 1.19
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.19
+
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Cache go modules
+        uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
+          restore-keys: ${{ runner.os }}-go-
+
+      - name: Run go fmt
+        if: runner.os != 'Windows'
+        run: diff -u <(echo -n) <(gofmt -d -s .)
+
+      - name: Run go vet
+        run: go vet ./...
+        
+      - name: Run go test
+        run: |
+          go test -v ./...
