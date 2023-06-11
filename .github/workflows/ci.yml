@@ -1,10 +1,16 @@
 name: Test
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      docker-image-version:
+        type: string
+        description: input image version
+        required: true
+        default: latest
 
 jobs:
-  test:
+  test_build_push:
     name: Test
     runs-on: ubuntu-latest
     strategy:
@@ -54,3 +60,20 @@ jobs:
       - name: Run go test
         run: |
           go test -v ./...
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Build And Push ECR
+        run: |
+          docker build -t terraform-ecs-fargate-spot .
+          docker tag terraform-ecs-fargate-spot:latest ${{ secrets.AWS_ECR_REGISTRY_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/dev-terraform-ecs-fargate-spot-ecr:latest
+          docker push ${{ secrets.AWS_ECR_REGISTRY_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/dev-terraform-ecs-fargate-spot-ecr:latest

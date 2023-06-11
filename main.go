@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"text/template"
 )
@@ -12,7 +13,8 @@ type Page struct { // テンプレート展開用のデータ構造
 
 func main() {
 	http.HandleFunc("/", handler) // hello
-	http.ListenAndServe(":8080", nil)
+	log.Println("starting api server...")
+	http.ListenAndServe(":80", nil)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -26,4 +28,5 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+	w.WriteHeader(http.StatusOK)
 }

@@ -9,3 +9,7 @@ output "alb_arn" {
 output "alb_dns_name" {
     value = aws_lb.this.dns_name
 }
+
+output "private_subnet_for_ecs" {
+    value = aws_subnet.private
+}

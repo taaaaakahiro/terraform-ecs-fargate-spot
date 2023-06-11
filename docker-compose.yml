@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  terraform-fargate-spot-example:
+    build: .
+    ports:
+      - 80:80
