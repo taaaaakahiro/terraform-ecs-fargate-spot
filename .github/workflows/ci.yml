@@ -75,5 +75,5 @@ jobs:
       - name: Build And Push ECR
         run: |
           docker build -t terraform-ecs-fargate-spot .
-          docker tag terraform-ecs-fargate-spot:latest ${{ secrets.AWS_ECR_REGISTRY_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/dev-terraform-ecs-fargate-spot-ecr:latest
-          docker push ${{ secrets.AWS_ECR_REGISTRY_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/dev-terraform-ecs-fargate-spot-ecr:latest
+          docker tag terraform-ecs-fargate-spot:latest ${{ secrets.AWS_ECR_REGISTRY_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/dev-terraform-ecs-fargate-spot-ecr:${{ inputs.docker-image-version }}
+          docker push ${{ secrets.AWS_ECR_REGISTRY_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/dev-terraform-ecs-fargate-spot-ecr:${{ inputs.docker-image-version }}
