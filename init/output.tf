@@ -10,10 +10,18 @@ output "alb_dns_name" {
   value = module.network.alb_dns_name
 }
 
-output "private_subnet_for_ecs_id" {
-  value = [for subnet in module.network.private_subnet_for_ecs : subnet.id]
+output "alb_target_group_arn" {
+  value = module.network.alb_target_group_arn
 }
 
-output "ecr_repository_url" {
-  value = module.ecr.ecr_repository_url
+output "private_subnet_ids" {
+  value = module.network.private_subnet_ids
+}
+
+output "ecr_repository_uri" {
+  value = module.ecr.ecr_repository_uri
+}
+
+output "security_group_id" {
+  value = module.network.security_group_id
 }
