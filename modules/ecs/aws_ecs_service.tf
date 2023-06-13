@@ -3,9 +3,19 @@ resource "aws_ecs_service" "backend" {
   cluster             = aws_ecs_cluster.this.id
   task_definition     = aws_ecs_task_definition.backend.arn
   desired_count       = 2
-  launch_type         = "FARGATE"
-  scheduling_strategy = "REPLICA"
   health_check_grace_period_seconds = 60
+
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE"
+    base              = 0
+    weight            = 1
+  }
+
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE_SPOT"
+    base              = 0
+    weight            = 1
+  }
 
   network_configuration {
     assign_public_ip = false
@@ -17,5 +27,13 @@ resource "aws_ecs_service" "backend" {
     target_group_arn = var.alb_target_group_arn
     container_name   = "${var.env}-app"
     container_port   = 80
+  }
+
+  lifecycle {
+    ignore_changes = [
+      desired_count,
+      task_definition,
+      capacity_provider_strategy
+    ]
   }
 }
