@@ -29,6 +29,14 @@ resource "aws_ecs_task_definition" "backend" {
           hostPort      = 80
         }
       ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options   = {
+          awslogs-region : var.region
+          awslogs-group : var.cloudwatch_log_group_name
+          awslogs-stream-prefix : "ecs"
+        }
+      }
     }
   ])
 }

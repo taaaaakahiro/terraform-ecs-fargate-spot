@@ -23,3 +23,11 @@ variable "alb_target_group_arn" {
 variable "ecr_repository_uri" {
     type = string
 }
+
+variable "cloudwatch_log_group_name" {
+   type = string
+}
+
+variable "region" {
+  type = string
+}
