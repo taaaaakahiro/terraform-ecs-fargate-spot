@@ -6,11 +6,11 @@ module "network" {
   subnet_count       = local.subnet_count
 }
 
-# module "iam" {
-#   source  = "../modules/iam"
-#   env     = local.env
-#   service = local.service
-# }
+module "iam" {
+  source  = "../modules/iam"
+  env     = local.env
+  service = local.service
+}
 
 module "ecr" {
   source  = "../modules/ecr"

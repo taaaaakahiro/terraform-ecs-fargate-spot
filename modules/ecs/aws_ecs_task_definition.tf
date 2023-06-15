@@ -4,8 +4,8 @@ resource "aws_ecs_task_definition" "backend" {
   network_mode             = "awsvpc"
   cpu                      = 256
   memory                   = 512
-  task_role_arn            = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsTaskExecutionRole"
-  execution_role_arn       = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsTaskExecutionRole"
+  task_role_arn            = var.ecs_task_execution_role_arn
+  execution_role_arn       = var.ecs_task_execution_role_arn
   // jsonファイルを使う場合
 #   container_definitions    = var.container-definition-file
   // codeで書く場合
