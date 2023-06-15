@@ -3,3 +3,6 @@ run:
 
 ci:
 	act --container-architecture linux/amd64 --secret-file .env --workflows .github/workflows/ci.yml
+
+plan:
+	act --container-architecture linux/amd64 --secret-file .env --workflows .github/workflows/plan.yml
