@@ -1,5 +1,5 @@
 # Build Go Server Binary
-FROM golang:1.19-buster AS build
+FROM golang:1.20-buster AS build
 
 WORKDIR /project
 
