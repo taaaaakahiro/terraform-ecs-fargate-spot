@@ -8,7 +8,7 @@ COPY ./main.go ./go.mod ./
 RUN go mod download
 RUN go build  -o ./bin/server .
 
-FROM debian:buster
+FROM debian:bookworm
 RUN apt update && apt install -y curl
 COPY --from=build /project/bin/server /bin/server
 
